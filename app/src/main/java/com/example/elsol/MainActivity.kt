@@ -67,7 +67,9 @@ class MainActivity : ComponentActivity() {
                     val navController  = rememberNavController()
                     NavHost(navController = navController, startDestination = "Principal"){
                         composable("Principal") { Principal(navController = navController) }
-
+                        composable("Filled.Email") { Email() }
+                        composable("Filled.Info") { Info() }
+                        composable("Filled.Build") {  Principal(navController = navController) }
                     }
                 }
             }
