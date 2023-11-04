@@ -85,10 +85,10 @@ fun Principal(navController: NavHostController) {
     Scaffold(snackbarHost = {
         SnackbarHost(hostState = snackbarHostState)
     },
-        bottomBar = {
+        bottomBar = { //barra de abajo
             BottomAppBar(
-                containerColor = Color.Red,
-                contentColor = Color.White,
+                containerColor = Color.Red,// color de fondo
+                contentColor = Color.White, // color de las letras
                 modifier = Modifier
                     .fillMaxWidth()
                     .zIndex(1f)
@@ -102,7 +102,7 @@ fun Principal(navController: NavHostController) {
                         .padding(end = 5.dp)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(
+                        IconButton( // boton para sacar el menu arrastrando
                             onClick = {
                                 scope.launch { drawerState.open() }
                             }
@@ -113,14 +113,14 @@ fun Principal(navController: NavHostController) {
                                 tint = Color.White
                             )
                         }
-                        BadgedBox(badge = {
+                        BadgedBox(badge = {//corazon con el contador encima para que cada vez que puses aumente
                             Badge {
                                 Text(text = badgeCount.toString())
                             }
 
                         }, modifier = Modifier
                             .padding(10.dp)
-                            .clickable { badgeCount++ }) {
+                            .clickable { badgeCount++ }) {//clicas aumenta el contador
                             Icon(
                                 imageVector = Icons.Default.Favorite,
                                 contentDescription = null,
@@ -128,7 +128,7 @@ fun Principal(navController: NavHostController) {
                             )
                         }
                     }
-                    Row {
+                    Row {//boton que no have nada
                         FloatingActionButton(onClick = { /*TODO*/ }, containerColor = Pink40) {
                             Icon(
                                 imageVector = Icons.Default.Add,
@@ -146,7 +146,7 @@ fun Principal(navController: NavHostController) {
         val selectedItem = remember {
             mutableStateOf(items[0])
         }
-        ModalNavigationDrawer(drawerState = drawerState,
+        ModalNavigationDrawer(drawerState = drawerState, //
             drawerContent = {
                 ModalDrawerSheet {
                     Image(
@@ -177,10 +177,11 @@ fun Principal(navController: NavHostController) {
                         .padding(bottom = it.calculateBottomPadding())
                 ) {
                     val cardDataList = getCardData()
+                    //recorre la el getCardData() y los distribuye en 2 columnas
                     LazyVerticalGrid(columns = GridCells.Fixed(2),
                         content = {
                             items(cardDataList) { cardData ->
-                                ItemCard(cardData, snackbarHostState)
+                                ItemCard(cardData, snackbarHostState) //snackbarHostState -> para que al pulsar la carta aparezca el texto abajo de la pantalla
                             }
                         }
                     )
@@ -190,12 +191,12 @@ fun Principal(navController: NavHostController) {
 }
 
 
-data class CardData(
+data class CardData( //la clase principal
     var name: String,
     @DrawableRes var photo: Int
 )
 
-fun getCardData(): List<CardData> {
+fun getCardData(): List<CardData> {//rellenamos los valores que despues vamos a utilizar
     return listOf(
         CardData(
             "Corona Solar",
@@ -229,31 +230,31 @@ fun getCardData(): List<CardData> {
 @Composable
 fun ItemCard(cardData: CardData, snackbarHostState: SnackbarHostState) {
     var isImageMenuVisible by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope() //importante! para la Snackbar
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
         elevation = CardDefaults.cardElevation(10.dp),
-        onClick = { scope.launch { snackbarHostState.showSnackbar(cardData.name) } }
+        onClick = { scope.launch { snackbarHostState.showSnackbar(cardData.name) } } //hace que al clicar aparezca el texto abajo
     ) {
         Column(Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(id = cardData.photo),
+            Image(//la imagen que va a aparecer en la carta
+                painter = painterResource(id = cardData.photo), //referencia a la clase data
                 contentDescription = "Image",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(220.dp),
+                    .height(220.dp), //modificamos el tamaño
                 contentScale = ContentScale.Crop
             )
-            BottomAppBar(modifier = Modifier.height(55.dp)) {
+            BottomAppBar(modifier = Modifier.height(55.dp)) {//barra de abajo de cada carta
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = cardData.name, modifier = Modifier.padding(start = 10.dp))
-                    IconButton(
+                    Text(text = cardData.name, modifier = Modifier.padding(start = 10.dp)) //incluye el nombre de data class en la barra
+                    IconButton( //el icono del menu
                         onClick = {
                             isImageMenuVisible = true
                         }
@@ -265,13 +266,13 @@ fun ItemCard(cardData: CardData, snackbarHostState: SnackbarHostState) {
                     }
                 }
 
-                DropdownMenu(
+                DropdownMenu( //la expansion de la bottomBar
                     expanded = isImageMenuVisible,
                     onDismissRequest = { isImageMenuVisible = false },
                     offset = DpOffset(0.dp, ((-40).dp))
                 )
                 {
-                    DropdownMenuItem(
+                    DropdownMenuItem( //primer item que es el de copiar
                         text = {
                             Text(
                                 text = "Copiar",
@@ -279,7 +280,7 @@ fun ItemCard(cardData: CardData, snackbarHostState: SnackbarHostState) {
                                 fontSize = 16.sp
                             )
                         },
-                        onClick = { isImageMenuVisible = false },
+                        onClick = { isImageMenuVisible = false }, //hace que cuado cliques encima del texto, desaparezca el DropdownMenu
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Add,

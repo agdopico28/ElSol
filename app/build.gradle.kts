@@ -48,7 +48,7 @@ android {
         }
     }
 }
-
+//estas implementaciones son las necesarias para la nevagacion
 dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
